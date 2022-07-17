@@ -1,9 +1,6 @@
 class ActiveChat extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
+
     static get attrTypes() {
         return {
             id: {
@@ -25,25 +22,17 @@ class ActiveChat extends Component {
         };
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+    
     static get observedAttributes() {
         return super.getObservedAttrs(ActiveChat.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+   
     static get tagName() {
         return super.generateTagName(ActiveChat.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+    
     static get style() {
         return (`<style>
                     :host {
@@ -150,10 +139,7 @@ class ActiveChat extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+    
     static get template() {
         return (`
             <template>
@@ -193,16 +179,16 @@ class ActiveChat extends Component {
 
         this._backBtn = this.shadowRoot.getElementById("back-btn");
 
-        // render component
+        
         this.render();
     }
 
-    // call on attributes changed
+    
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (oldValue === newValue)
             return;
 
-        // re-render component
+        
         this.render();
     }
 
@@ -214,28 +200,22 @@ class ActiveChat extends Component {
         this._backBtn.removeEventListener("click", this._onBackBtnClicked.bind(this))
     }
 
-    /**
-     * fires when back btn clicked
-     * @private
-     */
+  
     _onBackBtnClicked(){
         this.emit(APP_EVENTS.CHAT_BOX_BACK_CLICKED);
     }
 
-    /**
-     * render component according to template and attributes
-     */
+   
     render() {
 
-        // check the existence of avatar
-        // fetch first char of name to show if avatar not passed
+        
         if (!this.getAttribute("avatar")) {
-            // put first char of name when avatar not passed
+            
             const name = (this.getAttribute("name") || "").toUpperCase();
             this.shadowRoot.querySelector(".char-avatar").innerText = name.substr(0, 1);
         }
 
-        // loop over attributes and set all
+        
         for (let attr of this.attributes) {
             const target = this.shadowRoot.getElementById(attr.name);
             if (!target)
@@ -255,5 +235,4 @@ class ActiveChat extends Component {
 
 }
 
-// define active-chat tag name
 customElements.define(ActiveChat.tagName, ActiveChat);
