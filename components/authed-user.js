@@ -1,9 +1,6 @@
 class AuthedUser extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
+    
     static get attrTypes() {
         return {
             id: {
@@ -25,25 +22,17 @@ class AuthedUser extends Component {
         };
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+   
     static get observedAttributes() {
         return super.getObservedAttrs(AuthedUser.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+   
     static get tagName() {
         return super.generateTagName(AuthedUser.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+   
     static get style() {
         return (`<style>
                 :host {
@@ -141,10 +130,7 @@ class AuthedUser extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+    
     static get template() {
         return (`
             <template>
@@ -190,16 +176,14 @@ class AuthedUser extends Component {
             template: AuthedUser.template
         });
 
-        // render component
         this.render();
     }
 
-    // call on attributes changed
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (oldValue === newValue)
             return;
 
-        // re-render component
+        
         this.render();
     }
 
@@ -212,10 +196,7 @@ class AuthedUser extends Component {
         this.setAttribute("avatar", user.avatar);
     }
 
-    /**
-     * reflect the hidden attr on HTML tag
-     * @param value
-     */
+   
     set hidden(value) {
         if (value)
             this.setAttribute("hidden", '');
@@ -227,20 +208,18 @@ class AuthedUser extends Component {
         return this.hasAttribute("hidden")
     }
 
-    /**
-     * render component according to template and attributes
-     */
+   
     render() {
 
-        // check the existence of avatar
-        // fetch first char of title to show if avatar not passed
+        
         if (!this.getAttribute("avatar")) {
-            // put first char of title when avatar not passed
+           
             const name = (this.getAttribute("name") || "").toUpperCase();
             this.shadowRoot.querySelector(".char-avatar").innerText = name.substr(0, 1);
         }
 
-        // loop over attributes and set all
+        
+        
         for (let attr of this.attributes) {
             const target = this.shadowRoot.getElementById(attr.name);
             if (!target)
@@ -260,5 +239,5 @@ class AuthedUser extends Component {
     }
 }
 
-// define auth-user tag name
+
 customElements.define(AuthedUser.tagName, AuthedUser);
