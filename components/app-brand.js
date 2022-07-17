@@ -1,32 +1,21 @@
 class AppBrand extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
+
     static get attrTypes() {
         return {};
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+    
     static get observedAttributes() {
         return super.getObservedAttrs(AppBrand.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+    
     static get tagName() {
         return super.generateTagName(AppBrand.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+   
     static get style() {
         return (`<style>
                     :host {
@@ -78,10 +67,7 @@ class AppBrand extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+    
     static get template() {
         return (`
             <template>
@@ -113,39 +99,29 @@ class AppBrand extends Component {
         this._profileBtn = this.shadowRoot.getElementById("profile-btn");
     }
 
-    // call on mounting
+    
     onMount() {
         this.initListeners();
     }
 
-    // call on un-mounting
+    
     onUnmount() {
         this.removeListeners();
     }
 
-    /**
-     * Initialize required listeners
-     */
+    
     initListeners() {
         this._profileBtn.addEventListener("click", this._onProfileBtnCLick.bind(this))
     }
 
-    /**
-     * remove added listeners
-     */
+
     removeListeners() {
         this._profileBtn.removeEventListener("click", this._onProfileBtnCLick.bind(this))
     }
 
-    /**
-     * handle profile button click
-     * @param e
-     * @private
-     */
     _onProfileBtnCLick(e) {
         this.emit(APP_EVENTS.PROFILE_BTN_CLICK)
     }
 }
 
-// define app-brand tag name
 customElements.define(AppBrand.tagName, AppBrand);
