@@ -1,9 +1,5 @@
 class ChatMessage extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
     static get attrTypes() {
         return {
             sender: {
@@ -33,25 +29,17 @@ class ChatMessage extends Component {
         };
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+    
     static get observedAttributes() {
         return super.getObservedAttrs(ChatMessage.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+    
     static get tagName() {
         return super.generateTagName(ChatMessage.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+    
     static get style() {
         return (`<style>
                 :host {
@@ -174,10 +162,7 @@ class ChatMessage extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+    
     static get template() {
         return (`
             <template>
@@ -227,19 +212,16 @@ class ChatMessage extends Component {
         this._audioPlayBtn.removeEventListener("click", this._onAudioPlayBtnClick.bind(this))
     }
 
-    // call on attributes changed
+    
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (oldValue === newValue)
             return;
 
-        // re-render component
+      
         this.render();
     }
 
-    /**
-     * reflect the text attr on HTML tag
-     * @param value
-     */
+    
     set text(value) {
         if (value) {
             this.setAttribute('text', value);
@@ -252,15 +234,11 @@ class ChatMessage extends Component {
         return this.getAttribute('text');
     }
 
-    /**
-     * reflect the audio attr on HTML tag
-     * @param audioObj
-     */
+    
     set audio(audioObj) {
         if (audioObj) {
 
-            // set received object as _audio and do some process on it and
-            // add some listeners to control the play status or timing
+            
             this._audio = audioObj;
             const {audio, duration, audioUrl} = audioObj;
             this._audioElement = audio || new Audio(audioUrl);
@@ -268,18 +246,18 @@ class ChatMessage extends Component {
             this._audioDurationElm.innerText = duration;
 
             const onPause = () => {
-                // handle icon changing for btn
+                
                 this._audioPlayBtn.classList.remove("playing");
             };
 
             const onEnded = () => {
-                // reset the duration text and handle icon changing for btn
+                
                 this._audioDurationElm.innerText = duration;
                 this._audioPlayBtn.classList.remove("playing");
             };
 
             const onTimeUpdate = () => {
-                // calc duration and update the text when audio is playing
+               
                 const passedTime = Recorder.secToTimeStr(this._audioElement.currentTime);
                 this._audioDurationElm.innerText = `${passedTime} / ${duration}`;
             };
@@ -293,7 +271,7 @@ class ChatMessage extends Component {
             this._audioElement.ontimeupdate = onTimeUpdate;
 
         } else {
-            // set the _audio as null to remove it from component
+            
             this._audio = null;
         }
     }
@@ -310,10 +288,7 @@ class ChatMessage extends Component {
         return this._timeObject;
     }
 
-    /**
-     * reflect the time attr on HTML tag
-     * @param value
-     */
+    
     set time(value) {
         if (value) {
             this.setAttribute('time', value);
@@ -326,10 +301,7 @@ class ChatMessage extends Component {
         return this.getAttribute('time');
     }
 
-    /**
-     * reflect the sender attr on HTML tag
-     * @param value
-     */
+    
     set sender(value) {
         if (value) {
             this.setAttribute('sender', value);
@@ -342,10 +314,7 @@ class ChatMessage extends Component {
         return this.getAttribute('sender');
     }
 
-    /**
-     * reflect the islastingroup attr on HTML tag
-     * @param value
-     */
+    
     set isLastInGroup(value) {
         if (value) {
             this.setAttribute('lastingroup', '');
@@ -358,10 +327,7 @@ class ChatMessage extends Component {
         return this.hasAttribute('lastingroup');
     }
 
-    /**
-     * fire when audio message play btn clicked and toggle the playing status
-     * @private
-     */
+   
     _onAudioPlayBtnClick() {
         if (!this._audioElement)
             return;
@@ -373,9 +339,7 @@ class ChatMessage extends Component {
         }
     }
 
-    /**
-     * render message by attributes
-     */
+   
     render() {
         this._textElement.innerHTML = this.text;
         this._timeElement.innerHTML = this.time;
@@ -384,5 +348,5 @@ class ChatMessage extends Component {
 
 }
 
-// define chat-message tag name
+
 customElements.define(ChatMessage.tagName, ChatMessage);
