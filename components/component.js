@@ -1,6 +1,4 @@
-/**
- * Main component class that other components extends from it
- */
+
 class Component extends HTMLElement {
 
     constructor({attrTypes, template, shadowMode = "open"}) {
@@ -10,38 +8,26 @@ class Component extends HTMLElement {
         this._template = template;
         this._shadowMode = shadowMode;
 
-        // his method attach template to root if exists
         this.makeShadow();
     }
 
-    /**
-     * this method fire when component attached to DOM
-     */
+    
     connectedCallback() {
-        // Check attributes types for each component
+        
         this.checkAttrs();
-        // and call onMount method
-        // onMount is the only method that call inside connectedCallback
+        
         if (this.onMount && typeof this.onMount === "function")
             this.onMount();
     }
 
-    /**
-     * This method fire when component removed from DOM
-     */
+    
     disconnectedCallback() {
-        // call onMount method of component.
-        // onUnmount is the only method that call inside disconnectedCallback
+       
         if (this.onUnmount && typeof this.onUnmount === "function")
             this.onUnmount();
     }
 
-    /**
-     * parse attribute types according to passed types
-     * @param value
-     * @param target
-     * @returns {(number | boolean | string)|*}
-     */
+    
     parseAttrType(value, target) {
         if (value === void 0 || value === null)
             return value;
@@ -70,9 +56,7 @@ class Component extends HTMLElement {
         return value;
     }
 
-    /**
-     * check type of attributes
-     */
+    
     checkAttrs() {
         if (!this.attrTypes)
             return;
@@ -81,7 +65,7 @@ class Component extends HTMLElement {
 
             let value = this.parseAttrType(this.getAttribute(attr), details.type);
 
-            // replace attribute with parsed value if value is not null
+            
             if (value !== null)
                 this.setAttribute(attr, value || "");
 
@@ -97,20 +81,13 @@ class Component extends HTMLElement {
         }
     }
 
-    /**
-     * to check condition and fire event if its false
-     * @param condition
-     * @param error
-     */
+  
     assert(condition, error) {
         if (!condition)
             console.error(`Warning: ${error}`)
     }
 
-    /**
-     * parse html and get content as html
-     * @returns {Node}
-     */
+   
     parseTemplate() {
         let parser = new DOMParser();
         const doc = parser.parseFromString(this._template, 'text/html');
@@ -118,40 +95,26 @@ class Component extends HTMLElement {
         return doc.querySelector("template").content.cloneNode(true);
     }
 
-    /**
-     * attach template to shadow
-     */
+   
     makeShadow() {
-        // get template note
+       
         const template = this.parseTemplate();
 
-        // generate shadow dom
+      
         this.attachShadow({mode: this._shadowMode}).appendChild(template);
     }
 
-    /**
-     * dispatch an event
-     * @param event
-     * @param detail
-     */
+   
     emit(event, detail) {
         this.dispatchEvent(new CustomEvent(event, {detail}));
     }
 
-    /**
-     * Add listener to the host
-     * @param event
-     * @param callback
-     */
+   
     on(event, callback) {
         this.shadowRoot.host.addEventListener(event, callback.bind(this))
     }
 
-    /**
-     * Remove listener of the host
-     * @param event
-     * @param callback
-     */
+   
     off(event, callback) {
         this.shadowRoot.host.removeEventListener(event, callback.bind(this))
     }
@@ -160,10 +123,7 @@ class Component extends HTMLElement {
         return this.hasAttribute('disabled');
     }
 
-    /**
-     * reflect the disabled attr on HTML tag
-     * @param val
-     */
+    
     set disabled(val) {
         const isDisabled = Boolean(val);
         if (isDisabled)
@@ -172,19 +132,12 @@ class Component extends HTMLElement {
             this.removeAttribute('disabled');
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+   
     static generateTagName(className) {
         return className.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     }
 
-    /**
-     * generate list of attrs has observe:true
-     * @param attrTypes {Object}
-     * @returns {string[]}
-     */
+   
     static getObservedAttrs(attrTypes = {}) {
         return Object.entries(attrTypes || {})
             .filter(([_, details]) => details.observe)
