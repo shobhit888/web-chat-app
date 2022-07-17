@@ -1,32 +1,21 @@
 class NewMessage extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
+  
     static get attrTypes() {
         return {};
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+
     static get observedAttributes() {
         return super.getObservedAttrs(NewMessage.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+    
     static get tagName() {
         return super.generateTagName(NewMessage.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+    
     static get style() {
         return (`<style>
                 :host {
@@ -135,10 +124,7 @@ class NewMessage extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+    
     static get template() {
         return (`
             <template>
@@ -181,35 +167,29 @@ class NewMessage extends Component {
         this._soundRecordBtn = this.shadowRoot.getElementById("sound-record-btn");
         this._textarea = this.shadowRoot.getElementById("new-message-input");
 
-        // check if audio device is exists and make mic button visible
+        
         this.setMicBtnVisibility(Recorder.isMicAvailable());
 
-        // create recorder instance to control recording audio message
         this._recorder = new Recorder();
     }
 
-    /**
-     * toggle microphone button visibility
-     * @param showMic
-     */
+    
     setMicBtnVisibility(showMic) {
         this._soundRecordBtn.style.display = showMic ? "flex" : "none";
         this._textSendButton.style.display = showMic ? "none" : "flex";
     }
 
-    // call on mounting
+    
     onMount() {
         this.initListeners();
     }
 
-    // call on un-mounting
+    
     onUnmount() {
         this.removeListeners();
     }
 
-    /**
-     * Initialize required listeners
-     */
+   
     initListeners() {
         this.addEventListener("keydown", this._onKeyPress.bind(this));
         this._textarea.addEventListener("input", this._onType.bind(this));
@@ -220,9 +200,7 @@ class NewMessage extends Component {
         this._soundRecordBtn.addEventListener("touchend", this._onRecordStop.bind(this));
     }
 
-    /**
-     * remove added listeners
-     */
+   
     removeListeners() {
         this.removeEventListener("keydown", this._onKeyPress.bind(this));
         this._textarea.removeEventListener("input", this._onType.bind(this));
@@ -234,34 +212,17 @@ class NewMessage extends Component {
 
     }
 
-    /**
-     * fires when a key pressed and handle the Ctrl+Enter press
-     * if the user pressed Ctrl+Enter keys, this calls the send method
-     * @param e
-     * @private
-     */
     _onKeyPress(e) {
         if (e.ctrlKey && e.key.toLowerCase() === "enter") {
             this._onTextSend();
         }
     }
 
-    /**
-     * fires when the value of textarea changes,
-     * to toggle the visibility of text message sending button
-     * @param e
-     * @private
-     */
+    
     _onType(e) {
         this.setMicBtnVisibility(!e.target.value);
     }
 
-    /**
-     * fires when you want to send a new message,
-     * when the textarea has a valid value, this
-     * emit the message details to the parent component
-     * @private
-     */
     _onTextSend() {
 
         if (!this._textarea.value) {
@@ -275,26 +236,19 @@ class NewMessage extends Component {
         })
     }
 
-    /**
-     * fires when mic btn pressed and hold, it means to start the recording
-     * @private
-     */
+  
     _onRecordStart() {
-        // add "recording" class to record btn to start animation around the btn
+       
         this._soundRecordBtn.classList.add("recording");
         this._recorder.start();
     }
 
-    /**
-     * fires when mic btn released, it means to stop the recording
-     * @returns {Promise<void>}
-     * @private
-     */
+   
     async _onRecordStop() {
-        // remove "recording" class to record btn to stop btn animation
+        
         this._soundRecordBtn.classList.remove("recording");
 
-        // generate the audioObj of recording and pass it as new message to parent component
+       
         let audio = await this._recorder.stop();
         this.emit(APP_EVENTS.AUTHED_USER_NEW_MESSAGE, {
             audio,
@@ -302,19 +256,17 @@ class NewMessage extends Component {
         })
     }
 
-    // getter for the value of textarea
+    
     get message() {
         return this._textarea.value;
     }
 
-    /**
-     * this will clear the content of the textarea and puts focus on it
-     */
+    
     clear() {
         this._textarea.value = "";
         this._textarea.focus();
 
-        // check if audio device is exists and make mic button visible
+        
         this.setMicBtnVisibility(Recorder.isMicAvailable())
     }
 
