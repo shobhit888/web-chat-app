@@ -1,9 +1,6 @@
 class ChatListItem extends Component {
 
-    /**
-     * define attributes types
-     * @returns {Object}
-     */
+    
     static get attrTypes() {
         return {
             id: {
@@ -38,25 +35,17 @@ class ChatListItem extends Component {
         };
     }
 
-    /**
-     * generate observed attributes array from attr types object
-     */
+    
     static get observedAttributes() {
         return super.getObservedAttrs(ChatListItem.attrTypes);
     }
 
-    /**
-     * generate tag-name from component class name
-     * @returns {string}
-     */
+    
     static get tagName() {
         return super.generateTagName(ChatListItem.name);
     }
 
-    /**
-     * styles of component
-     * @returns {string}
-     */
+    
     static get style() {
         return (`<style>
                     :host {
@@ -181,10 +170,7 @@ class ChatListItem extends Component {
                 </style>`)
     }
 
-    /**
-     * html template of component
-     * @returns {string}
-     */
+   
     static get template() {
         return (`
             <template>
@@ -212,33 +198,28 @@ class ChatListItem extends Component {
             template: ChatListItem.template
         });
 
-        // render component
+        
         this.render();
     }
 
-    // call on mounting
     onMount() {
         this.initListeners();
     }
 
-    // call on un-mounting
+    
     onUnmount() {
         this.removeListeners();
     }
 
-    // call on attributes changed
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (oldValue === newValue)
             return;
 
-        // re-render component
+        
         this.render();
     }
 
-    /**
-     * reflect the selected attr on HTML tag
-     * @param value
-     */
+  
     set selected(value) {
         if (value) {
             this.setAttribute('selected', '');
@@ -252,7 +233,7 @@ class ChatListItem extends Component {
         return this.hasAttribute('selected');
     }
 
-    // call on attributes changed
+    
     incrementUnreadCount() {
         let count = 0;
         if (this.getAttribute("unreadcount"))
@@ -261,18 +242,12 @@ class ChatListItem extends Component {
         this.setAttribute('unreadcount', count + 1);
     }
 
-    /**
-     * call this when you want to reset the unread messages count
-     */
+   
     markAllAsRead() {
         this.setAttribute('unreadcount', '0');
     }
 
-    /**
-     * reflect the unread attr on HTML tag
-     * unread counter badge only shows on items that have truly unread attr
-     * @param value
-     */
+    
     set unread(value) {
         if (value)
             this.setAttribute('unread', '');
@@ -284,10 +259,7 @@ class ChatListItem extends Component {
         return this.hasAttribute('unread');
     }
 
-    /**
-     * reflect the online attr on HTML tag
-     * @param value
-     */
+    
     set online(value) {
         if (value)
             this.setAttribute('online', '');
@@ -299,60 +271,44 @@ class ChatListItem extends Component {
         return this.hasAttribute('online');
     }
 
-    /**
-     * Initialize required listeners
-     */
+   
     initListeners() {
         this.on("click", this._onClick)
     }
 
-    /**
-     * remove added listeners
-     */
+    
     removeListeners() {
         this.off("click", this._onClick)
     }
 
-    /**
-     * this method fire when chat-list-item clicked
-     * if the component is not disabled, it emit the
-     * clicked item id to above component (chatList) and
-     * set the selected attr
-     * @param e
-     * @private
-     */
+  
     _onClick(e) {
         e.preventDefault();
         if (this.disabled) {
             return;
         }
 
-        // send selected chat-item id to parent component
+        
         this.emit(APP_EVENTS.CHAT_CLICKED, {id: this.getAttribute("id")});
         this.selected = true;
-        // reset unread counter of this chat
+        
         this.markAllAsRead();
     }
 
-    /**
-     * render component according to template and attributes
-     */
+   
     render() {
 
-        // remove component if id not passed
+        
         if (!("id" in this.attributes)) {
             this.remove()
         }
 
-        // check the existence of avatar
-        // fetch first char of name to show if avatar not passed
         if (!this.getAttribute("avatar")) {
-            // put first char of name when avatar not passed
+            
             const name = (this.getAttribute("name") || "").toUpperCase();
             this.shadowRoot.querySelector(".char-avatar").innerText = name.substr(0, 1);
         }
 
-        // loop over attributes and set all
         for (let attr of this.attributes) {
             const target = this.shadowRoot.getElementById(attr.name);
             if (target)
@@ -374,5 +330,5 @@ class ChatListItem extends Component {
 
 }
 
-// define chat-list-item tag name
+
 customElements.define(ChatListItem.tagName, ChatListItem);
